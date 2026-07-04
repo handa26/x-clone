@@ -1,9 +1,37 @@
 import { Image } from "@imagekit/next";
 
+import { imageKitClient } from "@/utils";
+
 import PostInfo from "./PostInfo";
 import PostInteractions from "./PostInteractions";
 
-const Post = () => {
+interface FileDetailsResponse {
+	width: number;
+	height: number;
+	filePath: string;
+	url: string;
+	fileType: string;
+	customMetadata?: {
+		sensitive: boolean;
+	};
+}
+
+const Post = async () => {
+	const getFileDetails = async (
+		fileId: string,
+	): Promise<FileDetailsResponse> => {
+		try {
+			const result = await imageKitClient.files.get(fileId);
+
+			return result;
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	};
+
+	const fileDetails = await getFileDetails("6a477a425c7cd75eb893245d");
+
 	return (
 		<div className="p-4 border-y-[1px] border-borderGray">
 			{/* POST TYPE */}
@@ -14,7 +42,10 @@ const Post = () => {
 					height="18"
 					viewBox="0 0 24 24"
 				>
-					<path fill="#71767b" d="M4.75 3.79l4.603 4.3-1.706 1.82L6 8.38v7.37c0 .97.784 1.75 1.75 1.75H13V20H7.75c-2.347 0-4.25-1.9-4.25-4.25V8.38L1.853 9.91.147 8.09l4.603-4.3zm11.5 2.71H11V4h5.25c2.347 0 4.25 1.9 4.25 4.25v7.37l1.647-1.53 1.706 1.82-4.603 4.3-4.603-4.3 1.706-1.82L18 15.62V8.25c0-.97-.784-1.75-1.75-1.75z" />
+					<path
+						fill="#71767b"
+						d="M4.75 3.79l4.603 4.3-1.706 1.82L6 8.38v7.37c0 .97.784 1.75 1.75 1.75H13V20H7.75c-2.347 0-4.25-1.9-4.25-4.25V8.38L1.853 9.91.147 8.09l4.603-4.3zm11.5 2.71H11V4h5.25c2.347 0 4.25 1.9 4.25 4.25v7.37l1.647-1.53 1.706 1.82-4.603 4.3-4.603-4.3 1.706-1.82L18 15.62V8.25c0-.97-.784-1.75-1.75-1.75z"
+					/>
 				</svg>
 				<span>Handa retweeted</span>
 			</div>
@@ -45,7 +76,15 @@ const Post = () => {
 						Libero hic sapiente exercitationem provident in iure, minus sunt
 						ipsam pariatur recusandae?
 					</p>
-					<Image src="general/post.jpeg" alt="" width={600} height={600} />
+					{fileDetails && (
+						<Image
+							src={fileDetails.filePath}
+							alt=""
+							width={fileDetails.width}
+							height={fileDetails.height}
+							className={fileDetails.customMetadata?.sensitive ? "blur-lg" : ""}
+						/>
+					)}
 					<PostInteractions />
 				</div>
 			</div>
