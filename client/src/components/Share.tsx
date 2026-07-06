@@ -88,9 +88,11 @@ const Share = () => {
 				fileName: file.name, // Optionally set a custom file name
 				// Abort signal to allow cancellation of the upload if needed.
 				abortSignal: abortController.signal,
-				transformation: {
-					pre: transformation,
-				},
+				...(file.type.includes("image") && {
+					transformation: {
+						pre: transformation,
+					},
+				}),
 				customMetadata: {
 					sensitive: settings.sensitive,
 				},
@@ -139,7 +141,7 @@ const Share = () => {
 				/>
 
 				{/* IMAGE PREVIEW */}
-				{previewUrl && (
+				{media?.type.includes("image") && previewUrl && (
 					<div className="relative rounded-xl overflow-hidden">
 						<NextImage
 							src={previewUrl}
@@ -153,6 +155,25 @@ const Share = () => {
 							onClick={() => setIsEditorOpen(true)}
 						>
 							Edit
+						</div>
+						<div
+							className="absolute top-2 right-2 bg-black bg-opacity-50 text-white h-8 w-8 flex items-center justify-center rounded-full cursor-pointer font-bold text-sm"
+							onClick={() => setMedia(null)}
+						>
+							X
+						</div>
+					</div>
+				)}
+
+				{/* VIDEO PREVIEW */}
+				{media?.type.includes("video") && previewUrl && (
+					<div className="relative">
+						<video src={previewUrl} controls />
+						<div
+							className="absolute top-2 right-2 bg-black bg-opacity-50 text-white h-8 w-8 flex items-center justify-center rounded-full cursor-pointer font-bold text-sm"
+							onClick={() => setMedia(null)}
+						>
+							X
 						</div>
 					</div>
 				)}
@@ -176,6 +197,7 @@ const Share = () => {
 							ref={fileInputRef}
 							className="hidden"
 							id="file"
+							accept="image/*,video/*"
 						/>
 						<label htmlFor="file">
 							<Image

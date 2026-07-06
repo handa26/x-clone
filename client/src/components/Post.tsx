@@ -1,4 +1,4 @@
-import { Image } from "@imagekit/next";
+import { Image, Video } from "@imagekit/next";
 
 import { imageKitClient } from "@/utils";
 
@@ -30,7 +30,7 @@ const Post = async () => {
 		}
 	};
 
-	const fileDetails = await getFileDetails("6a477a425c7cd75eb893245d");
+	const fileDetails = await getFileDetails("6a4b44ab5c7cd75eb8bf25d0");
 
 	return (
 		<div className="p-4 border-y-[1px] border-borderGray">
@@ -76,13 +76,20 @@ const Post = async () => {
 						Libero hic sapiente exercitationem provident in iure, minus sunt
 						ipsam pariatur recusandae?
 					</p>
-					{fileDetails && (
+					{fileDetails && fileDetails.fileType === "image" ? (
 						<Image
 							src={fileDetails.filePath}
 							alt=""
 							width={fileDetails.width}
 							height={fileDetails.height}
 							className={fileDetails.customMetadata?.sensitive ? "blur-lg" : ""}
+						/>
+					) : (
+						<Video
+							src={fileDetails.filePath}
+							transformation={[{ width: "1920", height: "1080", q: "90" }]}
+							className={fileDetails.customMetadata?.sensitive ? "blur-lg" : ""}
+							controls
 						/>
 					)}
 					<PostInteractions />
