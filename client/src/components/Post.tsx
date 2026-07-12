@@ -1,4 +1,5 @@
 import { Image, Video } from "@imagekit/next";
+import Link from "next/link";
 
 import { imageKitClient } from "@/utils";
 
@@ -16,7 +17,7 @@ interface FileDetailsResponse {
 	};
 }
 
-const Post = async () => {
+const Post = async ({ type }: { type?: "status" | "comment" }) => {
 	const getFileDetails = async (
 		fileId: string,
 	): Promise<FileDetailsResponse> => {
@@ -51,31 +52,57 @@ const Post = async () => {
 			</div>
 
 			{/* POST CONTENT */}
-			<div className="flex gap-4">
+			<div className={`flex gap-4 ${type === "status" && "flex-col"}`}>
 				{/* AVATAR */}
-				<div className="relative w-10 h-10 rounded-full overflow-hidden">
+				<div
+					className={`${type === "status" && "hidden"} relative w-10 h-10 rounded-full overflow-hidden`}
+				>
 					<Image src="general/avatar.png" alt="" width={100} height={100} />
 				</div>
 
 				{/* CONTENT */}
 				<div className="flex-1 flex flex-col gap-2">
 					{/* TOP */}
-					<div className="flex items-center justify-between gap-2">
-						<div className="flex items-center gap-2 flex-wrap">
-							<h1 className="text-md font-bold">Handa</h1>
-							<span className="text-textGray">@handa26</span>
-							<span className="text-textGray">1 day ago</span>
-						</div>
+					<div className="w-full flex justify-between">
+						<Link href={`/handa26`} className="flex gap-4">
+							<div
+								className={`${type !== "status" && "hidden"} relative w-10 h-10 rounded-full overflow-hidden`}
+							>
+								<Image
+									src="general/avatar.png"
+									alt=""
+									width={100}
+									height={100}
+								/>
+							</div>
+							<div
+								className={`flex items-center gap-2 flex-wrap ${type === "status" && "flex-col gap-0 !items-start"}`}
+							>
+								<h1 className="text-md font-bold">Handa</h1>
+								<span
+									className={`text-textGray ${type === "status" && "text-sm"}`}
+								>
+									@handa26
+								</span>
+								{type !== "status" && (
+									<span className="text-textGray">1 day ago</span>
+								)}
+							</div>
+						</Link>
+
 						<PostInfo />
 					</div>
 
 					{/* TEXT/MEDIA */}
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla ab
-						nesciunt doloribus. Nam facilis est odio architecto voluptatum.
-						Libero hic sapiente exercitationem provident in iure, minus sunt
-						ipsam pariatur recusandae?
-					</p>
+					<Link href={`/handa26/status/123`}>
+						<p className={`${type === "status" && "text-lg"}`}>
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla ab
+							nesciunt doloribus. Nam facilis est odio architecto voluptatum.
+							Libero hic sapiente exercitationem provident in iure, minus sunt
+							ipsam pariatur recusandae?
+						</p>
+					</Link>
+
 					{fileDetails && fileDetails.fileType === "image" ? (
 						<Image
 							src={fileDetails.filePath}
@@ -92,6 +119,9 @@ const Post = async () => {
 							controls
 						/>
 					)}
+
+					{type === "status" && <span className="text-textGray">2:29 am · 14 May 2026</span>}
+
 					<PostInteractions />
 				</div>
 			</div>
