@@ -12,6 +12,7 @@
     "@imagekit/next": "^2.1.5",
     "@imagekit/nodejs": "^7.9.1",
     "next": "15.1.0",
+    "prisma": "6.2.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

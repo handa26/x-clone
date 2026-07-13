@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  mysql-db:
+    image: mysql:8.0 # The official MySQL image
+    container_name: twitter-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword # Root user password
+      MYSQL_DATABASE: my_database # Creates this DB automatically on startup
+      MYSQL_USER: app_user # (Optional) Standard user
+      MYSQL_PASSWORD: userpassword # (Optional) Standard user password
+    ports:
+      - "3306:3306" # LocalPort : ContainerPort
+    volumes:
+      - mysql_data:/var/lib/mysql # Persists your data so it isn't wiped when container stops
+
+volumes:
+  mysql_data: # Named volume managed by Docker
