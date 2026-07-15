@@ -1,4 +1,5 @@
-import { Image, ImageKitProvider } from "@imagekit/next";
+import { ImageKitProvider } from "@imagekit/next";
+import { ClerkProvider } from "@clerk/nextjs";
 
 import LeftBar from "@/components/LeftBar";
 import RightBar from "@/components/RightBar";
@@ -15,22 +16,24 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body>
-				<ImageKitProvider urlEndpoint="https://ik.imagekit.io/handa26">
-					<div className="flex justify-between mx-auto max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl xxl:max-w-screen-xxl">
-						<div className="px-2 xsm:px-4 xxl:px-8">
-							<LeftBar />
-						</div>
+				<ClerkProvider>
+					<ImageKitProvider urlEndpoint="https://ik.imagekit.io/handa26">
+						<div className="flex justify-between mx-auto max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl xxl:max-w-screen-xxl">
+							<div className="px-2 xsm:px-4 xxl:px-8">
+								<LeftBar />
+							</div>
 
-						<div className="flex-1 lg:min-w-[600px] border-x-[1px] border-borderGray">
-							{children}
-							{modal}
-						</div>
+							<div className="flex-1 lg:min-w-[600px] border-x-[1px] border-borderGray">
+								{children}
+								{modal}
+							</div>
 
-						<div className="hidden lg:flex ml-4 md:ml-8 flex-1">
-							<RightBar />
+							<div className="hidden lg:flex ml-4 md:ml-8 flex-1">
+								<RightBar />
+							</div>
 						</div>
-					</div>
-				</ImageKitProvider>
+					</ImageKitProvider>
+				</ClerkProvider>
 			</body>
 		</html>
 	);
