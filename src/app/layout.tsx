@@ -1,9 +1,6 @@
 import { ImageKitProvider } from "@imagekit/next";
 import { ClerkProvider } from "@clerk/nextjs";
 
-import LeftBar from "@/components/LeftBar";
-import RightBar from "@/components/RightBar";
-
 import "./globals.css";
 
 export default function AppLayout({

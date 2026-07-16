@@ -4,7 +4,6 @@ CREATE TABLE `User` (
     `email` VARCHAR(191) NOT NULL,
     `username` VARCHAR(191) NOT NULL,
     `displayName` VARCHAR(191) NULL,
-    `name` VARCHAR(191) NULL,
     `bio` VARCHAR(191) NULL,
     `location` VARCHAR(191) NULL,
     `job` VARCHAR(191) NULL,
