@@ -6,32 +6,37 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@clerk/nextjs": "6.9.12",
     "@imagekit/next": "^2.1.5",
     "@imagekit/nodejs": "^7.9.1",
     "@prisma/client": "6.2.1",
-    "next": "15.1.0",
+    "next": "16.2.10",
     "prisma": "6.2.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
     "dotenv": "^17.4.2",
-    "eslint": "^9",
-    "eslint-config-next": "15.1.0",
+    "eslint": "10.7.0",
+    "eslint-config-next": "16.2.10",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.2.17",
+      "@types/react-dom": "19.2.3"
+    }
   }
 }
