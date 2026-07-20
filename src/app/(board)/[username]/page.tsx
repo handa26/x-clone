@@ -1,9 +1,22 @@
 import Link from "next/link";
 import { Image } from "@imagekit/next";
+import { notFound } from "next/navigation";
 
 import Feed from "@/components/Feed";
 
-const UserPage = () => {
+import { prisma } from "@/prisma";
+
+interface PageProps {
+	params: Promise<{ username: string }>;
+}
+
+const UserPage = async ({ params }: PageProps) => {
+	const user = await prisma.user.findUnique({
+		where: { username: (await params).username },
+	});
+
+	if (!user) notFound();
+
 	return (
 		<div className="">
 			{/* PROFILE TITLE */}
@@ -77,33 +90,28 @@ const UserPage = () => {
 							/>
 							<span>Indonesia</span>
 						</div>
-            <div className="flex items-center gap-2">
-							<Image
-								src="icons/date.svg"
-								alt="date"
-								width={20}
-								height={20}
-							/>
+						<div className="flex items-center gap-2">
+							<Image src="icons/date.svg" alt="date" width={20} height={20} />
 							<span>Joined July 2026</span>
 						</div>
 					</div>
 
-          {/* FOLLOWINGS & FOLLOWERS */}
-          <div className="flex gap-4">
-            <div className="flex items-center gap-2">
-              <span className="font-bold">100</span>
-              <span className="text-textGray text-[15px]">Followers</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="font-bold">100</span>
-              <span className="text-textGray text-[15px]">Followings</span>
-            </div>
-          </div>
+					{/* FOLLOWINGS & FOLLOWERS */}
+					<div className="flex gap-4">
+						<div className="flex items-center gap-2">
+							<span className="font-bold">100</span>
+							<span className="text-textGray text-[15px]">Followers</span>
+						</div>
+						<div className="flex items-center gap-2">
+							<span className="font-bold">100</span>
+							<span className="text-textGray text-[15px]">Followings</span>
+						</div>
+					</div>
 				</div>
 			</div>
 
-      {/* FEED */}
-      <Feed />
+			{/* FEED */}
+			<Feed userProfileId={user?.id} />
 		</div>
 	);
 };
