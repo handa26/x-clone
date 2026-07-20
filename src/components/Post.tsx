@@ -17,21 +17,21 @@ interface FileDetailsResponse {
 	};
 }
 
-const Post = async ({ type }: { type?: "status" | "comment" }) => {
-	const getFileDetails = async (
-		fileId: string,
-	): Promise<FileDetailsResponse> => {
-		try {
-			const result = await imageKitClient.files.get(fileId);
+const Post = ({ type }: { type?: "status" | "comment" }) => {
+	// const getFileDetails = async (
+	// 	fileId: string,
+	// ): Promise<FileDetailsResponse> => {
+	// 	try {
+	// 		const result = await imageKitClient.files.get(fileId);
 
-			return result;
-		} catch (error) {
-			console.log(error);
-			throw error;
-		}
-	};
+	// 		return result;
+	// 	} catch (error) {
+	// 		console.log(error);
+	// 		throw error;
+	// 	}
+	// };
 
-	const fileDetails = await getFileDetails("6a4b44ab5c7cd75eb8bf25d0");
+	// const fileDetails = await getFileDetails("6a4b44ab5c7cd75eb8bf25d0");
 
 	return (
 		<div className="p-4 border-y-[1px] border-borderGray">
@@ -103,7 +103,7 @@ const Post = async ({ type }: { type?: "status" | "comment" }) => {
 						</p>
 					</Link>
 
-					{fileDetails && fileDetails.fileType === "image" ? (
+					{/* {fileDetails && fileDetails.fileType === "image" ? (
 						<Image
 							src={fileDetails.filePath}
 							alt=""
@@ -118,7 +118,7 @@ const Post = async ({ type }: { type?: "status" | "comment" }) => {
 							className={fileDetails.customMetadata?.sensitive ? "blur-lg" : ""}
 							controls
 						/>
-					)}
+					)} */}
 
 					{type === "status" && <span className="text-textGray">2:29 am · 14 May 2026</span>}
 
