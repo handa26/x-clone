@@ -15,25 +15,72 @@ export async function GET(request: NextRequest) {
 	if (!userId) return;
 
 	// FETCH POSTS FROM THE CURRENT USER & THE FOLLOWING USERS
-	const whereCondition = userProfileId !== "undefined"
-		? { parentPostId: null, userId: userProfileId as string }
-		: {
-				parentPostId: null,
-				userId: {
-					in: [
-						userId,
-						...(
-							await prisma.follow.findMany({
-								where: { followerId: userId },
-								select: { followingId: true },
-							})
-						).map((follow) => follow.followingId),
-					],
-				},
-			};
+	const whereCondition =
+		userProfileId !== "undefined"
+			? { parentPostId: null, userId: userProfileId as string }
+			: {
+					parentPostId: null,
+					userId: {
+						in: [
+							userId,
+							...(
+								await prisma.follow.findMany({
+									where: { followerId: userId },
+									select: { followingId: true },
+								})
+							).map((follow) => follow.followingId),
+						],
+					},
+				};
 
 	const posts = await prisma.post.findMany({
 		where: whereCondition,
+		include: {
+			user: { select: { displayName: true, username: true, img: true } },
+			rePost: {
+				include: {
+					user: { select: { displayName: true, username: true, img: true } },
+					_count: {
+						select: {
+							likes: true,
+							rePosts: true,
+							comments: true,
+						},
+					},
+					likes: {
+						where: { userId: userId },
+						select: { id: true },
+					},
+					rePosts: {
+						where: { userId: userId },
+						select: { id: true },
+					},
+					saves: {
+						where: { userId: userId },
+						select: { id: true },
+					},
+				},
+			},
+			_count: {
+				select: {
+					likes: true,
+					rePosts: true,
+					comments: true,
+				},
+			},
+			likes: {
+				where: { userId: userId },
+				select: { id: true },
+			},
+			rePosts: {
+				where: { userId: userId },
+				select: { id: true },
+			},
+			saves: {
+				where: { userId: userId },
+				select: { id: true },
+			},
+		},
 		take: LIMIT,
 		skip: (Number(page) - 1) * LIMIT,
 	});
