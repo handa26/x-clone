@@ -51,7 +51,7 @@ const UserPage = async ({ params }: PageProps) => {
 					</div>
 
 					{/* AVATAR */}
-					<div className="w-1/5 aspect-square rounded-full overflow-hidden border-4 border-black bg-gray-300 absolute left-4 -translate-y-1/2">
+					<div className="w-1/5 aspect-square rounded-full flex justify-center align-middle overflow-hidden border-4 border-black bg-gray-300 absolute left-4 -translate-y-1/2">
 						<Image
 							src={user.img || "general/noAvatar.png"}
 							alt=""
