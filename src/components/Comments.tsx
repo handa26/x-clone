@@ -2,7 +2,25 @@ import { Image } from "@imagekit/next";
 
 import Post from "./Post";
 
-const Comments = () => {
+import { Post as PostType } from "@prisma/client";
+
+type CommentWithDetails = PostType & {
+	user: { displayName: string | null; username: string; img: string | null };
+	_count: { likes: number; rePosts: number; comments: number };
+	likes: { id: number }[];
+	rePosts: { id: number }[];
+	saves: { id: number }[];
+};
+
+const Comments = ({
+	comments,
+	postId,
+	username,
+}: {
+	comments: CommentWithDetails[];
+	postId: number;
+	username: string;
+}) => {
 	return (
 		<div className="">
 			<form className="flex items-center justify-between gap-4 p-4">
@@ -18,7 +36,7 @@ const Comments = () => {
 				<input
 					type="text"
 					className="flex-1 bg-transparent outline-none p-2 text-xl"
-          placeholder="Post your reply"
+					placeholder="Post your reply"
 				/>
 				<button className="py-2 px-4 font-bold bg-white text-black rounded-full">
 					Reply
@@ -26,12 +44,11 @@ const Comments = () => {
 			</form>
 
 			{/* Replies */}
-			<Post />
-			<Post />
-			<Post />
-			<Post />
-			<Post />
-			<Post />
+			{comments.map((comment) => (
+				<div key={comment.id}>
+					<Post post={comment} type="comment" />
+				</div>
+			))}
 		</div>
 	);
 };
