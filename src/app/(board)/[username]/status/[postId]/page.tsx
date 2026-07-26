@@ -64,6 +64,7 @@ const StatusPage = async ({
 						select: { id: true },
 					},
 				},
+				orderBy: { createdAt: "desc" },
 			},
 		},
 	});

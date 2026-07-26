@@ -1,6 +1,8 @@
 "use server";
 
 import { auth } from "@clerk/nextjs/server";
+import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 import { prisma } from "./prisma";
 
@@ -77,5 +79,48 @@ export const savePost = async (postId: number) => {
 		await prisma.savedPosts.create({
 			data: { userId, postId },
 		});
+	}
+};
+
+export const addComment = async (
+	prevState: { success: boolean; error: boolean },
+	formData: FormData,
+) => {
+	const { userId } = await auth();
+
+	if (!userId) return { success: false, error: true };
+
+	const username = formData.get("username");
+	const postId = formData.get("postId");
+	const desc = formData.get("desc");
+
+	const Comment = z.object({
+		parentPostId: z.number(),
+		desc: z.string().max(140),
+	});
+
+	const validatedFields = Comment.safeParse({
+		parentPostId: Number(postId),
+		desc,
+	});
+
+	if (!validatedFields.success) {
+		return { success: false, error: true };
+	}
+
+	try {
+		await prisma.post.create({
+			data: {
+				...validatedFields.data,
+				userId,
+			},
+		});
+
+		revalidatePath(`/${username}/status/${postId}`);
+
+		return { success: true, error: false };
+	} catch (error) {
+		console.log(error);
+		return { success: false, error: true };
 	}
 };

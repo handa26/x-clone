@@ -20,7 +20,8 @@
     "react-dom": "19.2.7",
     "react-infinite-scroll-component": "^7.2.1",
     "timeago.js": "^4.0.2",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/node": "^20",
