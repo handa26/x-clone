@@ -78,7 +78,10 @@ const Post = ({
 				<div className="flex-1 flex flex-col gap-2">
 					{/* TOP */}
 					<div className="w-full flex justify-between">
-						<Link href={`/${originalPost.user.username}`} className="flex gap-4">
+						<Link
+							href={`/${originalPost.user.username}`}
+							className="flex gap-4"
+						>
 							<div
 								className={`${type !== "status" && "hidden"} relative w-10 h-10 rounded-full overflow-hidden`}
 							>
@@ -112,14 +115,21 @@ const Post = ({
 					</div>
 
 					{/* TEXT/MEDIA */}
-					<Link href={`/${originalPost.user.username}/status/${originalPost.id}`}>
+					<Link
+						href={`/${originalPost.user.username}/status/${originalPost.id}`}
+					>
 						<p className={`${type === "status" && "text-lg"}`}>
 							{originalPost.desc}
 						</p>
 					</Link>
 
 					{originalPost.img && (
-						<Image src={originalPost.img} alt="" width={600} height={600} />
+						<Image
+							src={originalPost.img}
+							alt=""
+							width={600}
+							height={originalPost.imgHeight || 600}
+						/>
 					)}
 
 					{type === "status" && (
