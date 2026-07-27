@@ -7,6 +7,7 @@ import { Post as PostType } from "@prisma/client";
 
 import PostInfo from "./PostInfo";
 import PostInteractions from "./PostInteractions";
+import { PostImage } from "./PostImage";
 
 type PostWithDetails = PostType & {
 	user: {
@@ -124,12 +125,15 @@ const Post = ({
 					</Link>
 
 					{originalPost.img && (
-						<Image
+						<PostImage
 							src={originalPost.img}
-							alt=""
-							width={600}
 							height={originalPost.imgHeight || 600}
+							isSensitive={originalPost.isSensitive}
 						/>
+					)}
+
+					{originalPost.video && (
+						<Video src={originalPost.video} controls width={600} height={600} />
 					)}
 
 					{type === "status" && (
