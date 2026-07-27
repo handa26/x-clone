@@ -124,3 +124,54 @@ export const addComment = async (
 		return { success: false, error: true };
 	}
 };
+
+export const addPost = async (
+	prevState: { success: boolean; error: boolean },
+	formData: FormData,
+) => {
+	const PostSchema = z.object({
+		desc: z.string().max(140),
+		isSensitive: z.boolean().optional(),
+		img: z.string().optional(),
+		imgHeight: z.number().optional(),
+		video: z.string().optional(),
+	});
+
+	const { userId } = await auth();
+
+	if (!userId) return { success: false, error: true };
+
+	const desc = formData.get("desc") as string;
+	const isSensitiveRaw = formData.get("isSensitive") as string;
+	const img = (formData.get("img") as string) || "";
+	const imgHeight = Number(formData.get("imgHeight")) || 0;
+	const video = (formData.get("video") as string) || "";
+	const imgType = formData.get("imgType");
+
+	const validatedFields = PostSchema.safeParse({
+		desc,
+		isSensitive: isSensitiveRaw === "true",
+		img,
+		imgHeight,
+		video,
+	});
+
+	if (!validatedFields.success) {
+		return { success: false, error: true };
+	}
+
+	try {
+		await prisma.post.create({
+			data: {
+				...validatedFields.data,
+				userId,
+			},
+		});
+
+		revalidatePath("/");
+		return { success: true, error: false };
+	} catch (error) {
+		console.error("Prisma error:", error);
+		return { success: false, error: true };
+	}
+};
